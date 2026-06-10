@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Self Care TikTok Video Maker</title>
+  <style>
+    :root{
+      --bg:#08111f;
+      --card:#111c2e;
+      --card2:#16243b;
+      --text:#f7fbff;
+      --muted:#9fb1cc;
+      --line:rgba(255,255,255,.1);
+      --primary:#19c6a7;
+      --primary2:#4d7cff;
+      --danger:#ff5c7a;
+      --radius:22px;
+      --shadow:0 24px 70px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(25,198,167,.2), transparent 30%),
+        radial-gradient(circle at top right, rgba(77,124,255,.22), transparent 26%),
+        linear-gradient(135deg, #07101e 0%, #0c1628 100%);
+      min-height:100vh;
+    }
+    header{
+      padding:22px 18px 12px;
+      max-width:1320px;
+      margin:auto;
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .brand h1{font-size:clamp(22px,4vw,36px); margin:0 0 6px; letter-spacing:-.02em}
+    .brand p{margin:0;color:var(--muted);line-height:1.6;font-size:14px}
+    .badge{padding:10px 14px;border:1px solid var(--line);border-radius:99px;color:#dce8ff;background:rgba(255,255,255,.05);font-size:13px}
+    main{
+      max-width:1320px;
+      margin:auto;
+      padding:12px 18px 34px;
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:20px;
+      align-items:start;
+    }
+    .panel{
+      background:rgba(17,28,46,.86);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+    }
+    .panel-head{padding:18px 18px 12px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .panel-head h2{margin:0;font-size:18px}
+    .panel-body{padding:18px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .full{grid-column:1/-1}
+    label{display:block;font-size:13px;color:#d7e2f8;margin:0 0 7px;font-weight:700}
+    input, textarea, select{
+      width:100%;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.07);
+      color:var(--text);
+      border-radius:16px;
+      padding:12px 13px;
+      outline:none;
+      font:inherit;
+      transition:.2s border,.2s background;
+    }
+    input:focus,textarea:focus,select:focus{border-color:rgba(25,198,167,.8);background:rgba(255,255,255,.1)}
+    textarea{min-height:88px;resize:vertical;line-height:1.5}
+    select option{background:#101b2f;color:#fff}
+    .hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    button,.button{
+      border:0;
+      border-radius:15px;
+      padding:12px 15px;
+      font-weight:800;
+      cursor:pointer;
+      color:#07101e;
+      background:linear-gradient(135deg,var(--primary),#9ff7df);
+      box-shadow:0 10px 24px rgba(25,198,167,.2);
+      transition:.15s transform,.15s opacity,.15s box-shadow;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    }
+    button:hover,.button:hover{transform:translateY(-1px);box-shadow:0 14px 30px rgba(25,198,167,.28)}
+    button.secondary{color:#eaf2ff;background:rgba(255,255,255,.09);box-shadow:none;border:1px solid var(--line)}
+    button.blue{color:#fff;background:linear-gradient(135deg,#4d7cff,#8b7cff)}
+    button.danger{color:#fff;background:linear-gradient(135deg,#ff5c7a,#ff9b71)}
+    button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+    .preview-wrap{display:grid;place-items:center;padding:18px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02))}
+    .phone{
+      width:min(390px,100%);
+      aspect-ratio:9/16;
+      border-radius:36px;
+      padding:10px;
+      background:#050912;
+      box-shadow:0 25px 80px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.08);
+      position:relative;
+    }
+    .phone:before{content:"";position:absolute;top:16px;left:50%;transform:translateX(-50%);width:100px;height:20px;border-radius:99px;background:#050912;z-index:2;box-shadow:0 0 0 1px rgba(255,255,255,.04)}
+    canvas{width:100%;height:100%;border-radius:28px;display:block;background:#07101e}
+    .status{margin-top:14px;color:var(--muted);font-size:13px;line-height:1.5;text-align:center;min-height:20px}
+    .script-box{
+      margin-top:16px;
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      color:#e9f2ff;
+      white-space:pre-wrap;
+      line-height:1.65;
+      font-size:14px;
+    }
+    .pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .mini-pill{font-size:12px;color:#dfeaff;background:rgba(255,255,255,.08);border:1px solid var(--line);padding:7px 10px;border-radius:999px}
+    .upload-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:8px}
+    .upload-card{border:1px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.04);border-radius:18px;padding:12px;text-align:center;min-height:96px;display:grid;align-content:center;gap:8px}
+    .upload-card input{padding:8px;font-size:12px}
+    .thumb{max-width:100%;height:64px;object-fit:contain;margin:auto;display:none}
+    .toggle{display:flex;align-items:center;gap:9px;color:#dce8ff;font-size:13px;margin-top:12px}
+    .toggle input{width:auto;accent-color:var(--primary)}
+    .progress{height:8px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;margin-top:12px;display:none}
+    .progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--primary2))}
+    @media (max-width:980px){main{grid-template-columns:1fr}.preview-panel{order:-1}.phone{width:min(360px,100%)}.grid,.grid-3{grid-template-columns:1fr}.upload-grid{grid-template-columns:1fr}}
+    @media (max-width:520px){header{padding-top:16px}.panel-body{padding:14px}.phone{border-radius:28px;padding:7px}.phone:before{display:none}canvas{border-radius:22px}button,.button{width:100%}.actions{gap:8px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>صانع فيديوهات تيك توك للصيدلية</h1>
+      <p>اعمل فيديو 9:16 للمنتجات، العروض، طريقة الطلب، أو التوعية — جاهز للتحميل والنشر.</p>
+    </div>
+    <div class="badge">Self Care Pharmacy • TikTok/Reels 9:16</div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div class="panel-head">
+        <h2>بيانات الفيديو</h2>
+        <span class="mini-pill">يفضل صورة PNG بخلفية بيضاء</span>
+      </div>
+      <div class="panel-body">
+        <div class="grid">
+          <div>
+            <label>اسم البراند</label>
+            <input id="brandName" value="Self Care Pharmacy" />
+          </div>
+          <div>
+            <label>لينك الطلب</label>
+            <input id="website" value="https://selfcare-en.netlify.app/" />
+          </div>
+          <div>
+            <label>لغة الفيديو</label>
+            <select id="language">
+              <option value="English">English</option>
+              <option value="Czech">Czech</option>
+              <option value="Arabic">Arabic</option>
+              <option value="German">German</option>
+              <option value="Russian">Russian</option>
+              <option value="Polish">Polish</option>
+            </select>
+          </div>
+          <div>
+            <label>نوع الفيديو</label>
+            <select id="videoType">
+              <option value="offer">عرض / خصم</option>
+              <option value="product">منتج واحد</option>
+              <option value="delivery">التوصيل وطريقة الطلب</option>
+              <option value="howto">How to order</option>
+              <option value="awareness">معلومة توعوية آمنة</option>
+            </select>
+          </div>
+          <div>
+            <label>مدة الفيديو</label>
+            <select id="duration">
+              <option value="12">12 ثانية</option>
+              <option value="15" selected>15 ثانية</option>
+              <option value="20">20 ثانية</option>
+            </select>
+          </div>
+          <div>
+            <label>ستايل الخلفية</label>
+            <select id="theme">
+              <option value="fresh">Fresh pharmacy</option>
+              <option value="dark">Premium dark</option>
+              <option value="summer">Summer/tourists</option>
+              <option value="clean">Clean white</option>
+            </select>
+          </div>
+          <div>
+            <label>اسم المنتج / الموضوع</label>
+            <input id="productName" value="Fast delivery to your hotel" />
+          </div>
+          <div>
+            <label>السعر أو العرض</label>
+            <input id="priceLine" value="Order online • Delivery slots available" />
+          </div>
+          <div class="full">
+            <label>Hook / أول جملة تشد المشاهد</label>
+            <input id="hook" value="Need pharmacy delivery in Hurghada?" />
+          </div>
+          <div class="full">
+            <label>النقط الأساسية — كل نقطة في سطر</label>
+            <textarea id="benefits">Hotel delivery
+Easy WhatsApp follow-up
+Check your order with the courier</textarea>
+          </div>
+          <div class="full">
+            <label>Call to Action</label>
+            <input id="cta" value="Order now from the website" />
+          </div>
+        </div>
+
+        <div class="upload-grid">
+          <div class="upload-card">
+            <label>لوجو الصيدلية</label>
+            <img id="logoThumb" class="thumb" alt="Logo preview" />
+            <input id="logoFile" type="file" accept="image/*" />
+          </div>
+          <div class="upload-card">
+            <label>صورة المنتج</label>
+            <img id="productThumb" class="thumb" alt="Product preview" />
+            <input id="productFile" type="file" accept="image/*" />
+          </div>
+          <div class="upload-card">
+            <label>موسيقى اختيارية</label>
+            <span class="hint">MP3/M4A لو حابب</span>
+            <input id="audioFile" type="file" accept="audio/*" />
+          </div>
+        </div>
+
+        <label class="toggle"><input id="safeNote" type="checkbox" checked /> أضف تنبيه آمن: “اسأل الصيدلي/الطبيب عند الحاجة”</label>
+
+        <div class="actions">
+          <button id="localScriptBtn" type="button">اعمل سكريبت سريع</button>
+          <button id="aiScriptBtn" class="blue" type="button">ولّد بالـ Gemini</button>
+          <button id="copyBtn" class="secondary" type="button">انسخ السكريبت</button>
+        </div>
+
+        <div id="scriptBox" class="script-box">اضغط “اعمل سكريبت سريع” أو “ولّد بالـ Gemini” وسيظهر هنا السكريبت والكابشن والهاشتاجات.</div>
+      </div>
+    </section>
+
+    <section class="panel preview-panel">
+      <div class="panel-head">
+        <h2>المعاينة والتصدير</h2>
+        <span id="recordBadge" class="mini-pill">Ready</span>
+      </div>
+      <div class="preview-wrap">
+        <div class="phone">
+          <canvas id="videoCanvas" width="1080" height="1920"></canvas>
+        </div>
+        <div id="status" class="status">المعاينة تعمل تلقائيًا. غيّر البيانات وشوف الشكل فورًا.</div>
+        <div class="progress" id="progress"><span id="progressBar"></span></div>
+        <div class="actions" style="justify-content:center">
+          <button id="recordBtn" type="button">صدّر الفيديو</button>
+          <button id="pauseBtn" class="secondary" type="button">إيقاف/تشغيل المعاينة</button>
+          <a id="downloadLink" class="button danger" style="display:none" download="self-care-tiktok-video.webm">تحميل الفيديو</a>
+        </div>
+        <div class="hint" style="text-align:center;max-width:520px;margin-top:10px">
+          التصدير يتم من المتصفح بصيغة WebM حسب دعم الجهاز. لو احتجت MP4، ارفعه على CapCut أو أي محوّل فيديو ثم نزّله MP4.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const canvas = $('videoCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const state = {
+      logo: null,
+      product: null,
+      bg: null,
+      playing: true,
+      recording: false,
+      start: performance.now(),
+      lastScript: '',
+      audioUrl: null
+    };
+
+    const fields = ['brandName','website','language','videoType','duration','theme','productName','priceLine','hook','benefits','cta','safeNote'];
+    fields.forEach(id => $(id).addEventListener(id === 'safeNote' ? 'change' : 'input', renderStill));
+
+    function escapeHtml(str){return String(str || '').replace(/[&<>'"]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[s]));}
+    function getLines(){return $('benefits').value.split('\n').map(x => x.trim()).filter(Boolean).slice(0,4);}
+    function values(){
+      return {
+        brandName: $('brandName').value.trim() || 'Self Care Pharmacy',
+        website: $('website').value.trim() || 'https://selfcare-en.netlify.app/',
+        language: $('language').value,
+        videoType: $('videoType').value,
+        duration: Number($('duration').value) || 15,
+        theme: $('theme').value,
+        productName: $('productName').value.trim() || 'Pharmacy delivery',
+        priceLine: $('priceLine').value.trim(),
+        hook: $('hook').value.trim() || 'Need pharmacy delivery?',
+        benefits: getLines(),
+        cta: $('cta').value.trim() || 'Order now',
+        safeNote: $('safeNote').checked
+      };
+    }
+
+    function loadImageFromFile(input, targetKey, thumbId){
+      const file = input.files && input.files[0];
+      if(!file) return;
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        state[targetKey] = img;
+        const thumb = $(thumbId);
+        thumb.src = url;
+        thumb.style.display = 'block';
+        renderStill();
+      };
+      img.src = url;
+    }
+    $('logoFile').addEventListener('change', e => loadImageFromFile(e.target, 'logo', 'logoThumb'));
+    $('productFile').addEventListener('change', e => loadImageFromFile(e.target, 'product', 'productThumb'));
+    $('audioFile').addEventListener('change', e => {
+      const file = e.target.files && e.target.files[0];
+      if(state.audioUrl) URL.revokeObjectURL(state.audioUrl);
+      state.audioUrl = file ? URL.createObjectURL(file) : null;
+      $('status').textContent = file ? 'تم إضافة موسيقى اختيارية للفيديو.' : 'تم حذف الموسيقى.';
+    });
+
+    function easeOut(t){return 1 - Math.pow(1 - Math.max(0, Math.min(1, t)), 3);}
+    function clamp(v,a,b){return Math.max(a, Math.min(b, v));}
+    function sceneProgress(t, start, end){return clamp((t - start) / (end - start), 0, 1);}
+
+    function themeColors(theme){
+      const map = {
+        fresh: ['#051724','#0cc9aa','#4d7cff','#ffffff'],
+        dark: ['#050812','#8b7cff','#19c6a7','#ffffff'],
+        summer: ['#07111f','#ffbe58','#25d6aa','#ffffff'],
+        clean: ['#f5fbff','#13b99e','#4d7cff','#07111f']
+      };
+      return map[theme] || map.fresh;
+    }
+
+    function drawGradient(bg, c1, c2, c3){
+      const g = ctx.createLinearGradient(0,0,W,H);
+      g.addColorStop(0,bg);
+      g.addColorStop(.55, shade(bg, -8));
+      g.addColorStop(1, '#03060d');
+      ctx.fillStyle = g;
+      ctx.fillRect(0,0,W,H);
+      drawBlob(W*.18,H*.14,360,c2,.28);
+      drawBlob(W*.86,H*.2,300,c3,.22);
+      drawBlob(W*.5,H*.92,520,c2,.16);
+    }
+    function shade(hex, amt){
+      let c = hex.replace('#','');
+      if(c.length !== 6) return hex;
+      let n = parseInt(c,16);
+      let r = Math.max(0, Math.min(255, (n >> 16) + amt));
+      let g = Math.max(0, Math.min(255, ((n >> 8) & 255) + amt));
+      let b = Math.max(0, Math.min(255, (n & 255) + amt));
+      return '#' + (b | (g << 8) | (r << 16)).toString(16).padStart(6,'0');
+    }
+    function hexToRgba(hex, alpha){
+      let c = hex.replace('#','');
+      if(c.length !== 6) return `rgba(255,255,255,${alpha})`;
+      const n = parseInt(c,16);
+      return `rgba(${n>>16},${(n>>8)&255},${n&255},${alpha})`;
+    }
+    function drawBlob(x,y,r,color,alpha){
+      const g = ctx.createRadialGradient(x,y,0,x,y,r);
+      g.addColorStop(0, hexToRgba(color,alpha));
+      g.addColorStop(1, hexToRgba(color,0));
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+    }
+    function roundRect(x,y,w,h,r){
+      const rr = Math.min(r,w/2,h/2);
+      ctx.beginPath();
+      ctx.moveTo(x+rr,y); ctx.arcTo(x+w,y,x+w,y+h,rr); ctx.arcTo(x+w,y+h,x,y+h,rr); ctx.arcTo(x,y+h,x,y,rr); ctx.arcTo(x,y,x+w,y,rr); ctx.closePath();
+    }
+    function drawText(text, x, y, maxWidth, fontSize, weight='800', color='#fff', align='center', lineHeight=1.12){
+      ctx.save();
+      ctx.textAlign = align;
+      ctx.textBaseline = 'top';
+      ctx.fillStyle = color;
+      ctx.font = `${weight} ${fontSize}px system-ui, -apple-system, Segoe UI, sans-serif`;
+      const words = String(text || '').split(/\s+/);
+      const lines = [];
+      let line = '';
+      for(const word of words){
+        const test = line ? line + ' ' + word : word;
+        if(ctx.measureText(test).width > maxWidth && line){ lines.push(line); line = word; }
+        else line = test;
+      }
+      if(line) lines.push(line);
+      lines.slice(0,5).forEach((ln,i) => ctx.fillText(ln, x, y + i * fontSize * lineHeight));
+      ctx.restore();
+      return Math.min(lines.length,5) * fontSize * lineHeight;
+    }
+    function drawPill(text, x, y, padX, padY, bg, color, fontSize=34){
+      ctx.save();
+      ctx.font = `800 ${fontSize}px system-ui, -apple-system, Segoe UI, sans-serif`;
+      const tw = ctx.measureText(text).width;
+      const w = tw + padX * 2, h = fontSize + padY * 2;
+      roundRect(x - w/2, y, w, h, h/2);
+      ctx.fillStyle = bg;
+      ctx.fill();
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = color;
+      ctx.fillText(text, x, y + h/2 + 1);
+      ctx.restore();
+      return h;
+    }
+    function fitImage(img, x, y, w, h, contain=true){
+      const ratio = img.width / img.height;
+      let dw = w, dh = h;
+      if(contain){
+        if(w/h > ratio){ dw = h*ratio; dh = h; } else { dh = w/ratio; dw = w; }
+      } else {
+        if(w/h < ratio){ dw = h*ratio; dh = h; } else { dh = w/ratio; dw = w; }
+      }
+      ctx.drawImage(img, x+(w-dw)/2, y+(h-dh)/2, dw, dh);
+    }
+    function drawLogo(v, cText){
+      const x = 64, y = 70, s = 92;
+      if(state.logo){
+        ctx.save();
+        roundRect(x, y, s, s, 26); ctx.clip();
+        ctx.fillStyle = 'rgba(255,255,255,.96)'; ctx.fillRect(x,y,s,s);
+        fitImage(state.logo,x+8,y+8,s-16,s-16,true);
+        ctx.restore();
+      } else {
+        ctx.save();
+        roundRect(x,y,s,s,26); ctx.fillStyle = 'rgba(255,255,255,.96)'; ctx.fill();
+        ctx.fillStyle = '#11b99d'; ctx.font = '900 46px system-ui'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('+', x+s/2, y+s/2-2);
+        ctx.restore();
+      }
+      drawText(v.brandName, x+s+24, y+14, 520, 34, '900', cText, 'left', 1.05);
+      drawText('TikTok Video Maker', x+s+24, y+55, 520, 22, '700', cText === '#07111f' ? 'rgba(7,17,31,.64)' : 'rgba(255,255,255,.65)', 'left', 1.05);
+    }
+
+    function drawProductCard(v, prog, c2, c3, cText){
+      const y = 500 - 50 * easeOut(prog);
+      const x = 110;
+      const w = W-220, h = 640;
+      ctx.save();
+      ctx.globalAlpha = .18 + .82 * easeOut(prog);
+      roundRect(x, y, w, h, 54);
+      ctx.fillStyle = v.theme === 'clean' ? 'rgba(255,255,255,.78)' : 'rgba(255,255,255,.10)';
+      ctx.fill();
+      ctx.strokeStyle = v.theme === 'clean' ? 'rgba(7,17,31,.08)' : 'rgba(255,255,255,.16)';
+      ctx.lineWidth = 3; ctx.stroke();
+      if(state.product){
+        ctx.save();
+        roundRect(x+60, y+56, w-120, 420, 46); ctx.clip();
+        ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.fillRect(x+60,y+56,w-120,420);
+        fitImage(state.product, x+80, y+76, w-160, 380, true);
+        ctx.restore();
+      } else {
+        ctx.save();
+        roundRect(x+72, y+70, w-144, 390, 46);
+        const g = ctx.createLinearGradient(x,y,x+w,y+h);
+        g.addColorStop(0, hexToRgba(c2,.9)); g.addColorStop(1, hexToRgba(c3,.9));
+        ctx.fillStyle = g; ctx.fill();
+        ctx.fillStyle = '#fff'; ctx.font='900 150px system-ui'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('+', x+w/2, y+265);
+        drawText('Upload product image', x+w/2, y+340, w-210, 38, '900', '#fff', 'center');
+        ctx.restore();
+      }
+      drawText(v.productName, W/2, y+500, w-110, 56, '950', cText, 'center', 1.05);
+      if(v.priceLine) drawPill(v.priceLine, W/2, y+575, 38, 18, hexToRgba(c2,.95), '#07101e', 30);
+      ctx.restore();
+    }
+
+    function renderAt(timeRatio){
+      const v = values();
+      const [bg,c2,c3,cText] = themeColors(v.theme);
+      drawGradient(bg, c2, c3, c2);
+      if(v.theme === 'clean'){
+        ctx.fillStyle = '#f7fbff'; ctx.fillRect(0,0,W,H);
+        drawBlob(W*.2,H*.12,360,c2,.16); drawBlob(W*.85,H*.84,460,c3,.14);
+      }
+      drawLogo(v, cText);
+
+      const t = timeRatio;
+      const hookP = sceneProgress(t, 0, .23);
+      const prodP = sceneProgress(t, .16, .55);
+      const benP = sceneProgress(t, .42, .78);
+      const ctaP = sceneProgress(t, .72, 1);
+
+      ctx.save();
+      ctx.globalAlpha = 1 - sceneProgress(t,.22,.36) * .55;
+      const hookY = 250 - 22*easeOut(hookP);
+      drawPill('NEW', W/2, hookY-88, 42, 18, hexToRgba(c3,.92), '#07101e', 36);
+      drawText(v.hook, W/2, hookY, W-150, 82, '950', cText, 'center', 1.04);
+      ctx.restore();
+
+      drawProductCard(v, prodP, c2, c3, cText);
+
+      ctx.save();
+      ctx.globalAlpha = easeOut(benP);
+      const lines = v.benefits.length ? v.benefits : ['Fast delivery', 'WhatsApp follow-up', 'Easy ordering'];
+      const baseY = 1168 - 60 * easeOut(benP);
+      lines.forEach((line, i) => {
+        const y = baseY + i*106;
+        roundRect(110, y, W-220, 78, 36);
+        ctx.fillStyle = v.theme === 'clean' ? 'rgba(7,17,31,.07)' : 'rgba(255,255,255,.10)';
+        ctx.fill();
+        ctx.fillStyle = hexToRgba(c2,.95); ctx.beginPath(); ctx.arc(158, y+39, 24, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = '#07101e'; ctx.font = '900 30px system-ui'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('✓', 158, y+39);
+        drawText(line, 205, y+18, W-340, 36, '850', cText, 'left', 1.05);
+      });
+      ctx.restore();
+
+      ctx.save();
+      ctx.globalAlpha = easeOut(ctaP);
+      const y = 1580 - 42 * easeOut(ctaP);
+      roundRect(90, y, W-180, 210, 48);
+      const gg = ctx.createLinearGradient(90,y,W-90,y+210);
+      gg.addColorStop(0, hexToRgba(c2,.98)); gg.addColorStop(1, hexToRgba(c3,.98));
+      ctx.fillStyle = gg; ctx.fill();
+      drawText(v.cta, W/2, y+38, W-260, 54, '950', '#07101e', 'center', 1.08);
+      drawText(v.website.replace(/^https?:\/\//,''), W/2, y+118, W-260, 32, '850', 'rgba(7,16,30,.78)', 'center', 1.05);
+      if(v.safeNote){
+        drawText('Ask a pharmacist/doctor when needed. Check your order before payment.', W/2, 1818, W-150, 24, '700', v.theme === 'clean' ? 'rgba(7,17,31,.55)' : 'rgba(255,255,255,.62)', 'center', 1.1);
+      }
+      ctx.restore();
+    }
+
+    function loop(now){
+      if(state.playing && !state.recording){
+        const dur = values().duration * 1000;
+        const ratio = ((now - state.start) % dur) / dur;
+        renderAt(ratio);
+      }
+      requestAnimationFrame(loop);
+    }
+    function renderStill(){ if(!state.recording) renderAt(((performance.now()-state.start)%(values().duration*1000))/(values().duration*1000)); }
+    requestAnimationFrame(loop);
+
+    $('pauseBtn').addEventListener('click', () => {
+      state.playing = !state.playing;
+      if(state.playing) state.start = performance.now();
+      $('status').textContent = state.playing ? 'المعاينة تعمل.' : 'تم إيقاف المعاينة مؤقتًا.';
+    });
+
+    function localTemplate(){
+      const v = values();
+      const L = v.language;
+      let data;
+      if(L === 'Czech'){
+        data = {
+          hook:'Potřebujete lékárnu v Hurghadě?',
+          benefits:['Doručení do hotelu','Objednávka přes web','Kontrola objednávky u kurýra'],
+          cta:'Objednejte nyní online',
+          caption:'Self Care Pharmacy doručuje vybrané produkty do hotelu v Hurghadě. Zkontrolujte objednávku při převzetí.',
+          tags:['#Hurghada','#Pharmacy','#Delivery','#SelfCarePharmacy']
+        };
+      } else if(L === 'Arabic'){
+        data = {
+          hook:'محتاج طلب صيدلية في الغردقة؟',
+          benefits:['توصيل للفندق','متابعة واتساب سهلة','راجع الطلب مع الدليفري'],
+          cta:'اطلب الآن من الموقع',
+          caption:'Self Care Pharmacy توصيل منتجات الصيدلية للفندق في الغردقة. راجع طلبك مع المندوب قبل الدفع.',
+          tags:['#الغردقة','#صيدلية','#توصيل','#SelfCarePharmacy']
+        };
+      } else {
+        data = {
+          hook:'Need pharmacy delivery in Hurghada?',
+          benefits:['Hotel delivery','Easy online order','Check your order with the courier'],
+          cta:'Order now from the website',
+          caption:'Self Care Pharmacy helps you order selected pharmacy essentials with hotel delivery in Hurghada. Please check your order before payment.',
+          tags:['#Hurghada','#PharmacyDelivery','#SelfCarePharmacy','#EgyptTravel']
+        };
+      }
+      if(v.videoType === 'offer') data.hook = L === 'Arabic' ? 'عرض سريع قبل ما يخلص' : L === 'Czech' ? 'Rychlá nabídka pro vás' : 'Quick offer before it ends';
+      if(v.videoType === 'product') data.hook = L === 'Arabic' ? `منتج اليوم: ${v.productName}` : L === 'Czech' ? `Produkt dne: ${v.productName}` : `Today’s pick: ${v.productName}`;
+      if(v.videoType === 'awareness') data.hook = L === 'Arabic' ? 'معلومة صيدلية مهمة' : L === 'Czech' ? 'Důležitý tip z lékárny' : 'Quick pharmacy tip';
+      $('hook').value = data.hook;
+      $('benefits').value = data.benefits.join('\n');
+      $('cta').value = data.cta;
+      const script = `Voiceover:\n1) ${data.hook}\n2) ${v.productName}\n3) ${data.benefits.join(' • ')}\n4) ${v.priceLine || ''}\n5) ${data.cta}\n\nCaption:\n${data.caption}\n\nHashtags:\n${data.tags.join(' ')}`;
+      state.lastScript = script;
+      $('scriptBox').textContent = script;
+      renderStill();
+    }
+    $('localScriptBtn').addEventListener('click', localTemplate);
+
+    $('copyBtn').addEventListener('click', async () => {
+      const text = state.lastScript || $('scriptBox').textContent;
+      try{ await navigator.clipboard.writeText(text); $('status').textContent = 'تم نسخ السكريبت.'; }
+      catch(e){ $('status').textContent = 'انسخ النص يدويًا من المربع.'; }
+    });
+
+    $('aiScriptBtn').addEventListener('click', async () => {
+      const btn = $('aiScriptBtn');
+      btn.disabled = true;
+      btn.textContent = 'جاري التوليد...';
+      $('status').textContent = 'Gemini بيجهز سكريبت مناسب للفيديو.';
+      try{
+        const res = await fetch('/.netlify/functions/generate-script', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(values())
+        });
+        const payload = await res.json();
+        if(!res.ok) throw new Error(payload.error || 'Gemini error');
+        const d = payload.data || {};
+        if(d.hook) $('hook').value = d.hook;
+        if(d.benefits && Array.isArray(d.benefits)) $('benefits').value = d.benefits.join('\n');
+        if(d.priceLine) $('priceLine').value = d.priceLine;
+        if(d.cta) $('cta').value = d.cta;
+        const script = `Voiceover:\n${(d.voiceover || []).map((x,i)=>`${i+1}) ${x}`).join('\n')}\n\nCaption:\n${d.caption || ''}\n\nHashtags:\n${(d.hashtags || []).join(' ')}\n\nSafety note:\n${d.safetyNote || 'Avoid dosage advice and medical claims.'}`;
+        state.lastScript = script;
+        $('scriptBox').textContent = script;
+        $('status').textContent = 'تم توليد السكريبت وتحديث الفيديو.';
+        renderStill();
+      }catch(err){
+        $('scriptBox').textContent = `Gemini مش متفعل أو حصل خطأ:\n${err.message}\n\nالحل: ضيف GEMINI_API_KEY في Netlify Environment Variables، أو استخدم زر السكريبت السريع.`;
+        $('status').textContent = 'لم يتم توليد Gemini. استخدم السكريبت السريع لحين إضافة المفتاح.';
+      }finally{
+        btn.disabled = false;
+        btn.textContent = 'ولّد بالـ Gemini';
+      }
+    });
+
+    async function recordVideo(){
+      if(!canvas.captureStream || !window.MediaRecorder){
+        $('status').textContent = 'جهازك/متصفحك لا يدعم التصدير من الصفحة. جرّب Chrome على كمبيوتر أو أندرويد حديث.';
+        return;
+      }
+      $('downloadLink').style.display = 'none';
+      state.recording = true;
+      state.playing = false;
+      const v = values();
+      const durationMs = v.duration * 1000;
+      const stream = canvas.captureStream(30);
+      let audioEl = null;
+      if(state.audioUrl){
+        try{
+          audioEl = new Audio(state.audioUrl);
+          audioEl.loop = false;
+          audioEl.volume = .9;
+          const audioStream = audioEl.captureStream ? audioEl.captureStream() : (audioEl.mozCaptureStream ? audioEl.mozCaptureStream() : null);
+          if(audioStream) audioStream.getAudioTracks().forEach(track => stream.addTrack(track));
+        }catch(e){ console.warn('Audio capture not available', e); }
+      }
+      const mime = MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus') ? 'video/webm;codecs=vp9,opus' : 'video/webm';
+      const recorder = new MediaRecorder(stream, {mimeType:mime, videoBitsPerSecond: 7000000});
+      const chunks = [];
+      recorder.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, {type:'video/webm'});
+        const url = URL.createObjectURL(blob);
+        const a = $('downloadLink');
+        a.href = url;
+        a.style.display = 'inline-flex';
+        state.recording = false;
+        state.playing = true;
+        state.start = performance.now();
+        $('recordBadge').textContent = 'Exported';
+        $('status').textContent = 'الفيديو جاهز للتحميل.';
+        $('progress').style.display = 'none';
+        $('progressBar').style.width = '0%';
+      };
+      recorder.start();
+      if(audioEl){ try{ await audioEl.play(); }catch(e){} }
+      $('recordBadge').textContent = 'Recording...';
+      $('status').textContent = 'جاري تصدير الفيديو...';
+      $('progress').style.display = 'block';
+      const started = performance.now();
+      function frame(now){
+        const elapsed = now - started;
+        const ratio = clamp(elapsed / durationMs, 0, 1);
+        renderAt(ratio);
+        $('progressBar').style.width = `${Math.round(ratio*100)}%`;
+        if(elapsed < durationMs){ requestAnimationFrame(frame); }
+        else { if(audioEl) audioEl.pause(); recorder.stop(); }
+      }
+      requestAnimationFrame(frame);
+    }
+    $('recordBtn').addEventListener('click', recordVideo);
+
+    localTemplate();
+  </script>
+</body>
+</html>
