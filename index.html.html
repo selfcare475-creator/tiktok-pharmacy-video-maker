@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Self Care Pharmacy Video Maker</title>
+<style>
+:root{--bg:#07111f;--panel:#121e31;--panel2:#1b2940;--text:#edf7ff;--muted:#aebbd0;--line:#34445c;--a:#66e6c4;--b:#6d7cff;--danger:#ff6b6b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0,#13223b 0,#07111f 50%,#030812 100%);font-family:system-ui,-apple-system,Segoe UI,Tahoma,Arial,sans-serif;color:var(--text)}
+.wrap{max-width:1180px;margin:auto;padding:18px}.hero{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px}.brand{display:flex;gap:12px;align-items:center}.mark{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--a),#8df5de);display:grid;place-items:center;color:#07111f;font-size:24px;font-weight:900}.title h1{margin:0;font-size:22px}.title p{margin:4px 0 0;color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:390px 1fr;gap:16px}.card{background:rgba(18,30,49,.88);border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:16px;box-shadow:0 18px 50px rgba(0,0,0,.25)}.card h2{margin:0 0 14px;font-size:18px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{margin-bottom:12px}.field label{display:block;margin:0 0 6px;color:#dbe7f8;font-weight:700;font-size:13px}input,textarea,select{width:100%;border:1px solid var(--line);background:#223149;color:var(--text);border-radius:14px;padding:12px 13px;font:inherit;outline:none}textarea{min-height:94px;resize:vertical;line-height:1.55}input[type=file]{padding:10px}.hint{font-size:12px;color:var(--muted);line-height:1.55}.btns{display:flex;gap:8px;flex-wrap:wrap}.btn{border:0;border-radius:16px;padding:12px 16px;font-weight:900;cursor:pointer;color:#08111d;background:linear-gradient(135deg,var(--a),#9bf2dd)}.btn.secondary{color:white;background:linear-gradient(135deg,#5277ff,#7f63ff)}.btn.dark{color:white;background:#26364f;border:1px solid var(--line)}.btn.danger{background:var(--danger);color:white}.btn:disabled{opacity:.55;cursor:not-allowed}.upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.thumb{height:145px;border:1px dashed var(--line);border-radius:18px;display:grid;place-items:center;overflow:hidden;background:#0d1829}.thumb img{max-width:100%;max-height:100%;object-fit:contain}.preview-zone{display:grid;grid-template-columns:360px 1fr;gap:16px}.phone{width:320px;max-width:100%;aspect-ratio:9/16;margin:auto;background:#030812;border-radius:32px;padding:10px;border:1px solid rgba(255,255,255,.15);box-shadow:0 20px 55px rgba(0,0,0,.42)}canvas{width:100%;height:100%;display:block;border-radius:24px;background:#0b1220}.output{background:#0f1a2b;border:1px solid var(--line);border-radius:18px;padding:12px;min-height:160px;white-space:pre-wrap;line-height:1.6;color:#e6f0ff}.pill{display:inline-flex;align-items:center;gap:8px;background:#243650;border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:#dbe7f8;font-size:12px}.status{color:#b9c7db;font-size:13px;line-height:1.7}.err{color:#ff9a9a}.ok{color:#8df5c7}audio,video{width:100%;margin-top:10px;border-radius:14px}.apiBox{background:#0f1a2b;border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:12px}.apiTop{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:10px}.apiTop strong{font-size:14px}.small{font-size:12px;color:var(--muted)}.check{display:flex;gap:8px;align-items:center;font-size:13px;color:#e7f1ff}.check input{width:auto}.ltr{direction:ltr;text-align:left}@media(max-width:980px){.grid,.preview-zone{grid-template-columns:1fr}.hero{align-items:flex-start;flex-direction:column}.phone{width:300px}.row,.upload-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="brand">
+      <div class="mark">+</div>
+      <div class="title"><h1>Self Care Pharmacy Video Maker</h1><p>نسخة خطوة واحدة: ملف index.html فقط، بدون GitHub Functions وبدون Netlify Variables.</p></div>
+    </div>
+    <span class="pill">9:16 TikTok / Reels + AI Script + AI Voice</span>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h2>1) بيانات الفيديو</h2>
+      <div class="apiBox">
+        <div class="apiTop"><strong>Gemini API Key</strong><span class="small">يتحفظ على جهازك فقط</span></div>
+        <input id="apiKey" class="ltr" placeholder="AIza...">
+        <div class="btns" style="margin-top:8px"><button class="btn dark" id="saveKey">احفظ المفتاح</button><button class="btn dark" id="clearKey">امسح</button></div>
+        <p class="hint">هذه النسخة الأسهل تعمل مباشرة من المتصفح. لا تضع المفتاح داخل الكود، اكتبه داخل الأداة فقط.</p>
+      </div>
+      <div class="field"><label>اسم الصيدلية</label><input id="brandName" value="Self Care Pharmacy Hurghada"></div>
+      <div class="row">
+        <div class="field"><label>اللغة</label><select id="language"><option>English</option><option>Arabic</option><option>Czech</option><option>German</option><option>Russian</option><option>Polish</option></select></div>
+        <div class="field"><label>مدة الفيديو</label><select id="duration"><option value="12">12 ثانية</option><option value="15" selected>15 ثانية</option><option value="20">20 ثانية</option><option value="25">25 ثانية</option></select></div>
+      </div>
+      <div class="field"><label>اسم المنتج / الموضوع</label><input id="productName" placeholder="مثال: Augmentin / Sunscreen / Delivery"></div>
+      <div class="field"><label>السعر أو العرض</label><input id="priceLine" placeholder="مثال: Fast delivery to your hotel"></div>
+      <div class="field"><label>لينك الطلب</label><input id="website" class="ltr" value="https://selfcare-en.netlify.app/"></div>
+      <div class="field"><label>نقاط مهمة</label><textarea id="benefits" placeholder="Hotel delivery
+Easy online order
+WhatsApp follow-up">Hotel delivery
+Easy online order
+Check your order with the courier</textarea></div>
+      <div class="upload-grid">
+        <div class="field"><label>صورة المنتج</label><input id="productFile" type="file" accept="image/*"><div class="thumb" id="productThumb">صورة المنتج</div></div>
+        <div class="field"><label>لوجو الصيدلية</label><input id="logoFile" type="file" accept="image/*"><div class="thumb" id="logoThumb">اللوجو</div></div>
+      </div>
+      <div class="field"><label>صوت جاهز اختياري MP3/M4A/WAV</label><input id="audioFile" type="file" accept="audio/*"><p class="hint">لو Gemini TTS لم يعمل، ارفع فويس أوفر جاهز وسيتم دخوله في الفيديو.</p></div>
+    </div>
+    <div class="card">
+      <h2>2) السكريبت والفويس أوفر</h2>
+      <div class="btns" style="margin-bottom:12px"><button class="btn" id="quickScript">اعمل سكريبت سريع</button><button class="btn secondary" id="aiScript">ولّد سكريبت Gemini</button><button class="btn dark" id="copyScript">انسخ السكريبت</button></div>
+      <div class="field"><label>Hook</label><input id="hook" value="Need pharmacy delivery in Hurghada?"></div>
+      <div class="row">
+        <div class="field"><label>CTA</label><input id="cta" value="Order now from the website"></div>
+        <div class="field"><label>Safety note</label><input id="safetyNote" value="Ask a pharmacist or doctor when needed."></div>
+      </div>
+      <div class="field"><label>نص الفويس أوفر</label><textarea id="voiceText">Need pharmacy delivery in Hurghada? Order online and get your essentials delivered to your hotel. Check your order with the courier. Ask a pharmacist or doctor when needed.</textarea></div>
+      <div class="row">
+        <div class="field"><label>صوت Gemini</label><select id="voiceName"><option value="Puck">Puck - Upbeat</option><option value="Kore">Kore - Firm</option><option value="Charon">Charon - Informative</option><option value="Aoede">Aoede - Breezy</option><option value="Fenrir">Fenrir - Excitable</option><option value="Leda">Leda - Youthful</option><option value="Orus">Orus - Firm</option><option value="Zephyr">Zephyr - Bright</option></select></div>
+        <div class="field"><label>ستايل الأداء</label><select id="style"><option>Friendly pharmacy</option><option>Warm tourist-friendly</option><option>Upbeat TikTok ad</option><option>Calm informative</option></select></div>
+      </div>
+      <div class="btns" style="margin-bottom:12px"><button class="btn secondary" id="aiVoice">اعمل فويس أوفر AI</button><button class="btn dark" id="playVoice" disabled>اسمع الصوت</button><button class="btn dark" id="downloadVoice" disabled>نزّل الصوت</button></div>
+      <audio id="voiceAudio" controls style="display:none"></audio>
+      <div id="status" class="status">جاهز.</div>
+      <div class="field" style="margin-top:12px"><label>الناتج</label><div class="output" id="scriptOutput"></div></div>
+      <label class="check"><input id="safeNote" type="checkbox" checked> أضف تنبيه آمن في آخر الفيديو</label>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h2>3) معاينة وتصدير الفيديو</h2>
+    <div class="preview-zone">
+      <div class="phone"><canvas id="canvas" width="1080" height="1920"></canvas></div>
+      <div>
+        <div class="btns" style="margin-bottom:12px"><button class="btn" id="previewBtn">شغل المعاينة</button><button class="btn secondary" id="exportBtn">صدّر الفيديو بالصوت</button><button class="btn dark" id="downloadBtn" disabled>تحميل الفيديو</button></div>
+        <p class="hint">الفيديو سيصدر WebM. لو الموبايل لا يقبله، افتحه في CapCut أو حوّله إلى MP4.</p>
+        <video id="resultVideo" controls style="display:none"></video>
+        <div class="output" id="exportLog">لم يتم التصدير بعد.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let productImg=null,logoImg=null,audioBlob=null,audioUrl='',videoBlob=null,videoUrl='';
+const state={preview:false,start:0,raf:0};
+function setStatus(t,cls=''){ $('status').innerHTML=cls?`<span class="${cls}">${escapeHtml(t)}</span>`:escapeHtml(t); }
+function escapeHtml(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+function readLines(v){return String(v||'').split('\n').map(x=>x.trim()).filter(Boolean);}
+function imageFromFile(file,thumb){return new Promise((res,rej)=>{if(!file)return res(null);const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{thumb.innerHTML='';const p=new Image();p.src=r.result;thumb.appendChild(p);res(img)};img.onerror=rej;img.src=r.result};r.onerror=rej;r.readAsDataURL(file)});}
+$('productFile').onchange=async e=>{productImg=await imageFromFile(e.target.files[0],$('productThumb'));renderFrame(0)};
+$('logoFile').onchange=async e=>{logoImg=await imageFromFile(e.target.files[0],$('logoThumb'));renderFrame(0)};
+$('audioFile').onchange=e=>{const f=e.target.files[0];if(f){audioBlob=f;setAudioBlob(f);setStatus('تم تحميل الصوت الجاهز.', 'ok')}};
+$('saveKey').onclick=()=>{localStorage.setItem('gemini_api_key_one_step',$('apiKey').value.trim());setStatus('تم حفظ المفتاح على هذا الجهاز.', 'ok')};
+$('clearKey').onclick=()=>{localStorage.removeItem('gemini_api_key_one_step');$('apiKey').value='';setStatus('تم مسح المفتاح.', 'ok')};
+$('apiKey').value=localStorage.getItem('gemini_api_key_one_step')||'';
+function buildQuick(){const benefits=readLines($('benefits').value);const product=$('productName').value.trim()||'your pharmacy essentials';const lang=$('language').value;let hook=$('hook').value.trim();if(!hook)hook=lang==='Arabic'?'محتاج توصيل صيدلية في الغردقة؟':'Need pharmacy delivery in Hurghada?';const b=benefits.length?benefits:['Hotel delivery','Easy online order','WhatsApp follow-up'];const cta=$('cta').value.trim()||'Order now from the website';const safe=$('safetyNote').value.trim()||'Ask a pharmacist or doctor when needed.';const voice=[hook,`${product}. ${$('priceLine').value.trim()||'Fast delivery to your hotel.'}`,b.join('. '),cta,safe].filter(Boolean).join(' ');$('voiceText').value=voice;$('scriptOutput').textContent=`Hook: ${hook}\n\nVoiceover:\n${voice}\n\nCaption:\n${product} | ${cta}\n\nHashtags:\n#SelfCarePharmacy #Hurghada #PharmacyDelivery`;renderFrame(0)}
+$('quickScript').onclick=buildQuick;
+$('copyScript').onclick=async()=>{await navigator.clipboard.writeText($('scriptOutput').textContent||$('voiceText').value);setStatus('تم النسخ.', 'ok')};
+$('aiScript').onclick=async()=>{const key=$('apiKey').value.trim();if(!key)return setStatus('اكتب Gemini API Key أولًا.', 'err');setStatus('جاري توليد السكريبت...');try{const benefits=readLines($('benefits').value);const prompt=`Create a safe short TikTok/Reels pharmacy video script. Language: ${$('language').value}. Brand: ${$('brandName').value}. Product/topic: ${$('productName').value}. Offer/price: ${$('priceLine').value}. Website: ${$('website').value}. Points: ${benefits.join(' | ')}. Do not diagnose. Do not give dosage. Do not promise cures. Include a short safety note. Return JSON only: {"hook":"","voiceover":["","","","",""],"caption":"","hashtags":[""],"cta":"","safetyNote":""}`;const data=await geminiText(key,prompt);const obj=parseJson(data);const voice=Array.isArray(obj.voiceover)?obj.voiceover.join(' '):(obj.voiceover||'');$('hook').value=obj.hook||$('hook').value;$('cta').value=obj.cta||$('cta').value;$('safetyNote').value=obj.safetyNote||$('safetyNote').value;$('voiceText').value=voice||data;$('scriptOutput').textContent=`Hook: ${obj.hook||''}\n\nVoiceover:\n${voice||data}\n\nCaption:\n${obj.caption||''}\n\nHashtags:\n${Array.isArray(obj.hashtags)?obj.hashtags.join(' '):''}\n\nSafety note:\n${obj.safetyNote||''}`;setStatus('تم توليد السكريبت.', 'ok');renderFrame(0)}catch(e){setStatus(e.message||'فشل توليد السكريبت.', 'err')}};
+async function geminiText(key,prompt){const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(key)}`;const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:.8,responseMimeType:'application/json'}})});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error?.message||'Gemini text request failed');return j.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('\n')||'{}'}
+function parseJson(t){try{return JSON.parse(String(t).replace(/^```json/i,'').replace(/^```/,'').replace(/```$/,'').trim())}catch{return {voiceover:String(t)}}}
+$('aiVoice').onclick=async()=>{const key=$('apiKey').value.trim();if(!key)return setStatus('اكتب Gemini API Key أولًا.', 'err');const text=$('voiceText').value.trim();if(!text)return setStatus('اكتب نص الفويس أوفر أولًا.', 'err');setStatus('جاري إنشاء الصوت AI...');try{audioBlob=await geminiTts(key,`${$('style').value}. Speak clearly for a short pharmacy TikTok video. Text: ${text}`,$('voiceName').value);setAudioBlob(audioBlob);setStatus('تم إنشاء الفويس أوفر.', 'ok')}catch(e){setStatus((e.message||'فشل إنشاء الصوت')+' — يمكن رفع صوت يدوي من خانة الصوت.', 'err')}};
+async function geminiTts(key,text,voiceName){const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${encodeURIComponent(key)}`;const body={contents:[{parts:[{text}]}],generationConfig:{responseModalities:['AUDIO'],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName}}}}};const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error?.message||'Gemini voice request failed');const part=findInline(j);if(!part?.data)throw new Error('لم يصل ملف صوت من Gemini');const bytes=b64(part.data);const mime=part.mimeType||'audio/wav';if(/L16|pcm/i.test(mime))return pcmToWavBlob(bytes,rateFromMime(mime)||24000);return new Blob([bytes],{type:mime})}
+function findInline(o){if(!o||typeof o!=='object')return null;if(o.inlineData)return o.inlineData;if(Array.isArray(o)){for(const x of o){const f=findInline(x);if(f)return f}}else{for(const k of Object.keys(o)){const f=findInline(o[k]);if(f)return f}}return null}
+function b64(s){const bin=atob(s);const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return u}
+function rateFromMime(m){const x=String(m).match(/rate=(\d+)/i);return x?Number(x[1]):0}
+function pcmToWavBlob(pcm,sampleRate){const data=pcm instanceof Uint8Array?pcm:new Uint8Array(pcm);const buffer=new ArrayBuffer(44+data.length);const v=new DataView(buffer);writeStr(v,0,'RIFF');v.setUint32(4,36+data.length,true);writeStr(v,8,'WAVE');writeStr(v,12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sampleRate,true);v.setUint32(28,sampleRate*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);writeStr(v,36,'data');v.setUint32(40,data.length,true);new Uint8Array(buffer,44).set(data);return new Blob([buffer],{type:'audio/wav'})}
+function writeStr(v,o,s){for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))}
+function setAudioBlob(blob){if(audioUrl)URL.revokeObjectURL(audioUrl);audioUrl=URL.createObjectURL(blob);$('voiceAudio').src=audioUrl;$('voiceAudio').style.display='block';$('playVoice').disabled=false;$('downloadVoice').disabled=false}
+$('playVoice').onclick=()=>$('voiceAudio').play();
+$('downloadVoice').onclick=()=>downloadBlob(audioBlob,'selfcare-voiceover.wav');
+const canvas=$('canvas'),ctx=canvas.getContext('2d');
+function renderFrame(time){const W=canvas.width,H=canvas.height,dur=Number($('duration').value)||15;const scene=Math.min(4,Math.floor((time/dur)*5));const local=((time%(dur/5))/(dur/5));const brand=$('brandName').value||'Self Care Pharmacy';const product=$('productName').value||'Pharmacy essentials';const hook=$('hook').value||'Need pharmacy delivery?';const cta=$('cta').value||'Order now';const price=$('priceLine').value||'Fast hotel delivery';const safe=$('safeNote').checked?($('safetyNote').value||'Ask a pharmacist or doctor when needed.'):'';const lines=[hook,product,price,cta,safe];bg(W,H);ctx.save();ctx.globalAlpha=.95;if(logoImg)drawContain(logoImg,60,60,170,170);else badge(60,60,170,170,'Self Care');ctx.fillStyle='rgba(255,255,255,.78)';ctx.font='700 34px system-ui';ctx.textAlign='left';ctx.direction='ltr';wrapText(brand,250,125,720,42);ctx.restore();let y=0;if(scene===0){bigText(lines[0],W/2,520,76);drawProduct(W/2,1050,local);smallText('Hurghada • Makadi • Sahl Hasheesh',W/2,1530)}
+if(scene===1){drawProduct(W/2,760,local);bigText(lines[1],W/2,1250,68);smallText(lines[2],W/2,1440)}
+if(scene===2){bigText('Fast delivery to your hotel',W/2,520,66);drawIcons(W,H);smallText('Order online • WhatsApp follow-up',W/2,1420)}
+if(scene===3){drawProduct(W/2,780,local);bigText(lines[3],W/2,1270,70);smallText($('website').value,W/2,1450)}
+if(scene===4){bigText(lines[4]||lines[3],W/2,660,58);drawProduct(W/2,1080,local);smallText(lines[3],W/2,1510)}
+progress(time/dur,W,H);}
+function bg(W,H){const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#08172b');g.addColorStop(.55,'#10213b');g.addColorStop(1,'#06101e');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);for(let i=0;i<9;i++){ctx.fillStyle=`rgba(102,230,196,${.04+i*.003})`;ctx.beginPath();ctx.arc((i*137)%W,220+i*185,120+i*18,0,Math.PI*2);ctx.fill()}ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=2;roundRect(50,250,W-100,H-420,48,true,false)}
+function drawProduct(cx,cy,p){const size=520+Math.sin(p*Math.PI)*45;if(productImg)drawContain(productImg,cx-size/2,cy-size/2,size,size);else badge(cx-size/2,cy-size/2,size,size,'Product');}
+function drawContain(img,x,y,w,h){const r=Math.min(w/img.width,h/img.height);const nw=img.width*r,nh=img.height*r;ctx.save();ctx.fillStyle='rgba(255,255,255,.92)';roundRect(x,y,w,h,28,false,true);ctx.drawImage(img,x+(w-nw)/2,y+(h-nh)/2,nw,nh);ctx.restore()}
+function badge(x,y,w,h,t){ctx.save();ctx.fillStyle='rgba(255,255,255,.92)';roundRect(x,y,w,h,28,false,true);ctx.fillStyle='#0b1b2e';ctx.font='800 40px system-ui';ctx.textAlign='center';ctx.direction='ltr';wrapText(t,x+w/2,y+h/2-20,w-40,50);ctx.restore()}
+function bigText(t,x,y,fs){ctx.save();ctx.fillStyle='#ffffff';ctx.font=`900 ${fs}px system-ui`;ctx.textAlign='center';ctx.direction=/[\u0600-\u06FF]/.test(t)?'rtl':'ltr';wrapText(t,x,y,900,fs*1.18);ctx.restore()}
+function smallText(t,x,y){ctx.save();ctx.fillStyle='rgba(230,242,255,.86)';ctx.font='700 38px system-ui';ctx.textAlign='center';ctx.direction=/[\u0600-\u06FF]/.test(t)?'rtl':'ltr';wrapText(t,x,y,900,50);ctx.restore()}
+function drawIcons(W,H){const a=['Online order','Hotel delivery','Check with courier'];for(let i=0;i<a.length;i++){const y=730+i*210;ctx.fillStyle='rgba(102,230,196,.18)';roundRect(135,y-75,810,145,34,false,true);ctx.fillStyle='#66e6c4';ctx.font='900 56px system-ui';ctx.textAlign='center';ctx.fillText(i+1,850,y+18);ctx.fillStyle='#fff';ctx.font='800 44px system-ui';ctx.fillText(a[i],480,y+16)}}
+function progress(v,W,H){ctx.fillStyle='rgba(255,255,255,.18)';roundRect(120,H-110,W-240,14,7,false,true);ctx.fillStyle='#66e6c4';roundRect(120,H-110,(W-240)*Math.max(0,Math.min(1,v)),14,7,false,true)}
+function wrapText(text,x,y,max,line){const words=String(text||'').split(' ');let l='',yy=y;for(const w of words){const test=l?l+' '+w:w;if(ctx.measureText(test).width>max&&l){ctx.fillText(l,x,yy);l=w;yy+=line}else l=test}if(l)ctx.fillText(l,x,yy)}
+function roundRect(x,y,w,h,r,stroke,fill){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);if(fill)ctx.fill();if(stroke)ctx.stroke()}
+function loop(){if(!state.preview)return;const dur=Number($('duration').value)||15;const t=((performance.now()-state.start)/1000)%dur;renderFrame(t);state.raf=requestAnimationFrame(loop)}
+$('previewBtn').onclick=()=>{state.preview=!state.preview;if(state.preview){state.start=performance.now();$('previewBtn').textContent='إيقاف المعاينة';loop()}else{$('previewBtn').textContent='شغل المعاينة';cancelAnimationFrame(state.raf);renderFrame(0)}};
+$('exportBtn').onclick=exportVideo;
+async function exportVideo(){try{$('exportBtn').disabled=true;$('downloadBtn').disabled=true;$('exportLog').textContent='جاري تجهيز الفيديو...';const baseDur=Number($('duration').value)||15;let audioBuffer=null,audioCtx=null,dest=null,source=null;const canvasStream=canvas.captureStream(30);let stream=canvasStream,duration=baseDur;if(audioBlob){audioCtx=new (window.AudioContext||window.webkitAudioContext)();const arr=await audioBlob.arrayBuffer();audioBuffer=await audioCtx.decodeAudioData(arr.slice(0));duration=Math.max(baseDur,audioBuffer.duration);dest=audioCtx.createMediaStreamDestination();source=audioCtx.createBufferSource();source.buffer=audioBuffer;source.connect(dest);stream=new MediaStream([...canvasStream.getVideoTracks(),...dest.stream.getAudioTracks()])}const chunks=[];const mime=MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')?'video/webm;codecs=vp9,opus':'video/webm';const rec=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:5500000});rec.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};rec.onstop=()=>{videoBlob=new Blob(chunks,{type:'video/webm'});if(videoUrl)URL.revokeObjectURL(videoUrl);videoUrl=URL.createObjectURL(videoBlob);$('resultVideo').src=videoUrl;$('resultVideo').style.display='block';$('downloadBtn').disabled=false;$('exportBtn').disabled=false;$('exportLog').textContent='تم التصدير. اضغط تحميل الفيديو.'};rec.start(250);if(source)source.start();const start=performance.now();function draw(){const t=(performance.now()-start)/1000;renderFrame(Math.min(t,duration));if(t<duration){requestAnimationFrame(draw)}else{setTimeout(()=>rec.stop(),300)}}draw()}catch(e){$('exportLog').innerHTML=`<span class="err">${escapeHtml(e.message||'فشل التصدير')}</span>`;$('exportBtn').disabled=false}}
+$('downloadBtn').onclick=()=>downloadBlob(videoBlob,'selfcare-tiktok-video.webm');
+function downloadBlob(blob,name){if(!blob)return;const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}
+buildQuick();renderFrame(0);
+</script>
+</body>
+</html>
