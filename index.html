@@ -132,6 +132,13 @@
     .upload-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:8px}
     .upload-card{border:1px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.04);border-radius:18px;padding:12px;text-align:center;min-height:96px;display:grid;align-content:center;gap:8px}
     .upload-card input{padding:8px;font-size:12px}
+
+    .voice-tools{margin-top:14px;border:1px solid var(--line);background:rgba(255,255,255,.045);border-radius:18px;padding:14px}
+    .voice-tools h3{margin:0 0 12px;font-size:16px;color:#f5fbff}
+    .voice-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .voice-output{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin-top:12px}
+    audio{width:100%;height:42px}
+    @media (max-width:720px){.voice-controls{grid-template-columns:1fr}.voice-output{grid-template-columns:1fr}.voice-tools .actions button,.voice-tools .actions a{width:100%}}
     .thumb{max-width:100%;height:64px;object-fit:contain;margin:auto;display:none}
     .toggle{display:flex;align-items:center;gap:9px;color:#dce8ff;font-size:13px;margin-top:12px}
     .toggle input{width:auto;accent-color:var(--primary)}
@@ -240,11 +247,58 @@ Check your order with the courier</textarea>
             <input id="productFile" type="file" accept="image/*" />
           </div>
           <div class="upload-card">
-            <label>موسيقى اختيارية</label>
-            <span class="hint">MP3/M4A لو حابب</span>
+            <label>صوت أو موسيقى اختيارية</label>
+            <span class="hint">MP3/M4A يدوي لو حابب</span>
             <input id="audioFile" type="file" accept="audio/*" />
           </div>
         </div>
+
+        <div class="voice-tools">
+          <h3>الفويس أوفر</h3>
+          <div>
+            <label>نص الفويس أوفر</label>
+            <textarea id="voiceText">اضغط “اعمل سكريبت سريع” أو “ولّد بالـ Gemini” وسيظهر هنا نص الفويس أوفر.</textarea>
+            <div class="hint">الأداة هتقرأ النص ده بصوت AI، والصوت يدخل تلقائيًا في الفيديو عند التصدير.</div>
+          </div>
+          <div class="voice-controls" style="margin-top:12px">
+            <div>
+              <label>نوع الصوت</label>
+              <select id="voiceName">
+                <option value="Puck">Puck - Upbeat</option>
+                <option value="Achird">Achird - Friendly</option>
+                <option value="Sulafat">Sulafat - Warm</option>
+                <option value="Aoede">Aoede - Breezy</option>
+                <option value="Kore">Kore - Firm</option>
+                <option value="Charon">Charon - Informative</option>
+              </select>
+            </div>
+            <div>
+              <label>ستايل الأداء</label>
+              <select id="voiceStyle">
+                <option value="friendly">Friendly pharmacy</option>
+                <option value="energetic">TikTok energetic</option>
+                <option value="calm">Calm medical</option>
+                <option value="premium">Premium ad</option>
+              </select>
+            </div>
+            <div>
+              <label>استخدام الصوت</label>
+              <select id="audioMode">
+                <option value="voice">فويس أوفر فقط</option>
+                <option value="uploaded">الصوت المرفوع يدويًا</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button id="voiceBtn" class="blue" type="button">اعمل فويس أوفر AI</button>
+            <a id="voiceDownload" class="button secondary" style="display:none" download="self-care-voiceover.wav">تحميل الصوت</a>
+          </div>
+          <div class="voice-output">
+            <audio id="voicePlayer" controls style="display:none"></audio>
+            <span id="voiceStatus" class="hint">لم يتم إنشاء صوت بعد.</span>
+          </div>
+        </div>
+
 
         <label class="toggle"><input id="safeNote" type="checkbox" checked /> أضف تنبيه آمن: “اسأل الصيدلي/الطبيب عند الحاجة”</label>
 
@@ -294,7 +348,9 @@ Check your order with the courier</textarea>
       recording: false,
       start: performance.now(),
       lastScript: '',
-      audioUrl: null
+      audioUrl: null,
+      uploadedAudioUrl: null,
+      generatedVoiceUrl: null
     };
 
     const fields = ['brandName','website','language','videoType','duration','theme','productName','priceLine','hook','benefits','cta','safeNote'];
@@ -337,9 +393,16 @@ Check your order with the courier</textarea>
     $('productFile').addEventListener('change', e => loadImageFromFile(e.target, 'product', 'productThumb'));
     $('audioFile').addEventListener('change', e => {
       const file = e.target.files && e.target.files[0];
-      if(state.audioUrl) URL.revokeObjectURL(state.audioUrl);
-      state.audioUrl = file ? URL.createObjectURL(file) : null;
-      $('status').textContent = file ? 'تم إضافة موسيقى اختيارية للفيديو.' : 'تم حذف الموسيقى.';
+      if(state.uploadedAudioUrl) URL.revokeObjectURL(state.uploadedAudioUrl);
+      state.uploadedAudioUrl = file ? URL.createObjectURL(file) : null;
+      if(file) {
+        $('audioMode').value = 'uploaded';
+        state.audioUrl = state.uploadedAudioUrl;
+      } else if($('audioMode').value === 'uploaded') {
+        state.audioUrl = state.generatedVoiceUrl;
+        $('audioMode').value = 'voice';
+      }
+      $('status').textContent = file ? 'تم إضافة صوت مرفوع يدويًا للفيديو.' : 'تم حذف الصوت المرفوع.';
     });
 
     function easeOut(t){return 1 - Math.pow(1 - Math.max(0, Math.min(1, t)), 3);}
@@ -552,6 +615,11 @@ Check your order with the courier</textarea>
     function renderStill(){ if(!state.recording) renderAt(((performance.now()-state.start)%(values().duration*1000))/(values().duration*1000)); }
     requestAnimationFrame(loop);
 
+    $('audioMode').addEventListener('change', () => {
+      state.audioUrl = $('audioMode').value === 'uploaded' ? state.uploadedAudioUrl : state.generatedVoiceUrl;
+      $('status').textContent = state.audioUrl ? 'تم اختيار مصدر الصوت للفيديو.' : 'مصدر الصوت المختار غير جاهز.';
+    });
+
     $('pauseBtn').addEventListener('click', () => {
       state.playing = !state.playing;
       if(state.playing) state.start = performance.now();
@@ -593,6 +661,8 @@ Check your order with the courier</textarea>
       $('hook').value = data.hook;
       $('benefits').value = data.benefits.join('\n');
       $('cta').value = data.cta;
+      const voice = [data.hook, v.productName, data.benefits.join('. '), v.priceLine || '', data.cta].filter(Boolean).join('. ');
+      $('voiceText').value = voice;
       const script = `Voiceover:\n1) ${data.hook}\n2) ${v.productName}\n3) ${data.benefits.join(' • ')}\n4) ${v.priceLine || ''}\n5) ${data.cta}\n\nCaption:\n${data.caption}\n\nHashtags:\n${data.tags.join(' ')}`;
       state.lastScript = script;
       $('scriptBox').textContent = script;
@@ -624,7 +694,9 @@ Check your order with the courier</textarea>
         if(d.benefits && Array.isArray(d.benefits)) $('benefits').value = d.benefits.join('\n');
         if(d.priceLine) $('priceLine').value = d.priceLine;
         if(d.cta) $('cta').value = d.cta;
-        const script = `Voiceover:\n${(d.voiceover || []).map((x,i)=>`${i+1}) ${x}`).join('\n')}\n\nCaption:\n${d.caption || ''}\n\nHashtags:\n${(d.hashtags || []).join(' ')}\n\nSafety note:\n${d.safetyNote || 'Avoid dosage advice and medical claims.'}`;
+        const voiceLines = Array.isArray(d.voiceover) ? d.voiceover.filter(Boolean) : [];
+        if(voiceLines.length) $('voiceText').value = voiceLines.join(' ');
+        const script = `Voiceover:\n${voiceLines.map((x,i)=>`${i+1}) ${x}`).join('\n')}\n\nCaption:\n${d.caption || ''}\n\nHashtags:\n${(d.hashtags || []).join(' ')}\n\nSafety note:\n${d.safetyNote || 'Avoid dosage advice and medical claims.'}`;
         state.lastScript = script;
         $('scriptBox').textContent = script;
         $('status').textContent = 'تم توليد السكريبت وتحديث الفيديو.';
@@ -638,6 +710,71 @@ Check your order with the courier</textarea>
       }
     });
 
+
+    $('voiceBtn').addEventListener('click', async () => {
+      const btn = $('voiceBtn');
+      const text = $('voiceText').value.trim();
+      if(!text){
+        $('voiceStatus').textContent = 'اكتب نص الفويس أوفر الأول.';
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'جاري إنشاء الصوت...';
+      $('voiceStatus').textContent = 'Gemini بيعمل الفويس أوفر الآن.';
+      $('status').textContent = 'جاري إنشاء صوت AI للفيديو.';
+      try{
+        const res = await fetch('/.netlify/functions/generate-voice', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            text,
+            language: $('language').value,
+            voiceName: $('voiceName').value,
+            style: $('voiceStyle').value
+          })
+        });
+        const payload = await res.json();
+        if(!res.ok) throw new Error(payload.error || 'Voiceover error');
+        state.generatedVoiceUrl = payload.audioUrl;
+        $('audioMode').value = 'voice';
+        state.audioUrl = state.generatedVoiceUrl;
+        $('voicePlayer').src = state.generatedVoiceUrl;
+        $('voicePlayer').style.display = 'block';
+        $('voiceDownload').href = state.generatedVoiceUrl;
+        $('voiceDownload').style.display = 'inline-flex';
+        $('voiceStatus').textContent = `تم إنشاء الفويس أوفر بصوت ${payload.voiceName || $('voiceName').value}.`;
+        $('status').textContent = 'الصوت جاهز، صدّر الفيديو وسيتم وضعه تلقائيًا.';
+      }catch(err){
+        $('voiceStatus').textContent = `فشل إنشاء الفويس أوفر: ${err.message}`;
+        $('status').textContent = 'راجع مفتاح Gemini أو جرّب صوت آخر.';
+      }finally{
+        btn.disabled = false;
+        btn.textContent = 'اعمل فويس أوفر AI';
+      }
+    });
+
+    async function attachAudioToStream(url, stream){
+      if(!url) return null;
+      const audioEl = new Audio(url);
+      audioEl.loop = false;
+      audioEl.volume = .95;
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if(AudioContextClass){
+        const audioContext = new AudioContextClass();
+        const source = audioContext.createMediaElementSource(audioEl);
+        const destination = audioContext.createMediaStreamDestination();
+        source.connect(destination);
+        destination.stream.getAudioTracks().forEach(track => stream.addTrack(track));
+        await audioContext.resume();
+        await audioEl.play();
+        return { audioEl, audioContext };
+      }
+      const audioStream = audioEl.captureStream ? audioEl.captureStream() : (audioEl.mozCaptureStream ? audioEl.mozCaptureStream() : null);
+      if(audioStream) audioStream.getAudioTracks().forEach(track => stream.addTrack(track));
+      await audioEl.play();
+      return { audioEl, audioContext: null };
+    }
+
     async function recordVideo(){
       if(!canvas.captureStream || !window.MediaRecorder){
         $('status').textContent = 'جهازك/متصفحك لا يدعم التصدير من الصفحة. جرّب Chrome على كمبيوتر أو أندرويد حديث.';
@@ -649,14 +786,10 @@ Check your order with the courier</textarea>
       const v = values();
       const durationMs = v.duration * 1000;
       const stream = canvas.captureStream(30);
-      let audioEl = null;
+      let audioRef = null;
       if(state.audioUrl){
         try{
-          audioEl = new Audio(state.audioUrl);
-          audioEl.loop = false;
-          audioEl.volume = .9;
-          const audioStream = audioEl.captureStream ? audioEl.captureStream() : (audioEl.mozCaptureStream ? audioEl.mozCaptureStream() : null);
-          if(audioStream) audioStream.getAudioTracks().forEach(track => stream.addTrack(track));
+          audioRef = await attachAudioToStream(state.audioUrl, stream);
         }catch(e){ console.warn('Audio capture not available', e); }
       }
       const mime = MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus') ? 'video/webm;codecs=vp9,opus' : 'video/webm';
@@ -664,6 +797,8 @@ Check your order with the courier</textarea>
       const chunks = [];
       recorder.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
       recorder.onstop = () => {
+        if(audioRef?.audioEl) audioRef.audioEl.pause();
+        if(audioRef?.audioContext) audioRef.audioContext.close().catch(()=>{});
         const blob = new Blob(chunks, {type:'video/webm'});
         const url = URL.createObjectURL(blob);
         const a = $('downloadLink');
@@ -678,7 +813,6 @@ Check your order with the courier</textarea>
         $('progressBar').style.width = '0%';
       };
       recorder.start();
-      if(audioEl){ try{ await audioEl.play(); }catch(e){} }
       $('recordBadge').textContent = 'Recording...';
       $('status').textContent = 'جاري تصدير الفيديو...';
       $('progress').style.display = 'block';
@@ -689,7 +823,7 @@ Check your order with the courier</textarea>
         renderAt(ratio);
         $('progressBar').style.width = `${Math.round(ratio*100)}%`;
         if(elapsed < durationMs){ requestAnimationFrame(frame); }
-        else { if(audioEl) audioEl.pause(); recorder.stop(); }
+        else { recorder.stop(); }
       }
       requestAnimationFrame(frame);
     }
